@@ -1,3 +1,4 @@
 pkg
 bin
 heroku-datadog-drain-golang
+Godeps/_workspace
