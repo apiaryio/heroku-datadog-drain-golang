@@ -1,1 +1,1 @@
-web: bin/heroku-datadog-drain
+web: heroku-datadog-drain-golang

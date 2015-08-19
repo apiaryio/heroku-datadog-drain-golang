@@ -16,7 +16,6 @@ func GetPort() string {
 	return ":" + port
 }
 
-
 func main() {
 	port := GetPort()
 	log.Println("[-] Listening on...", port)
