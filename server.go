@@ -1,16 +1,15 @@
 package main
 
 import (
-	"fmt"
+	"github.com/gin-gonic/gin"
 	"log"
-	"net/http"
 	"os"
 )
 
 func GetPort() string {
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "4747"
+		port = "8080"
 		log.Println("[-] No PORT environment variable detected. Setting to ", port)
 	}
 	return ":" + port
@@ -18,13 +17,11 @@ func GetPort() string {
 
 func main() {
 	port := GetPort()
-	log.Println("[-] Listening on...", port)
-	http.HandleFunc("/", func(res http.ResponseWriter, req *http.Request) {
-		fmt.Fprintln(res, "hello, world")
+
+	router := gin.Default()
+	router.GET("/status", func(c *gin.Context) {
+		c.String(200, "OK")
 	})
 
-	err := http.ListenAndServe(port, nil)
-	if err != nil {
-		panic(err)
-	}
+	router.Run(port)
 }
