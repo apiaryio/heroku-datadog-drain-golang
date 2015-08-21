@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/apiaryio/heroku-datadog-drain-golang.svg?branch=master)](https://travis-ci.org/apiaryio/heroku-datadog-drain-golang)
+
 # Heroku Datadog Drain
 
 Golang version of [NodeJS](https://github.com/ozinc/heroku-datadog-drain)
