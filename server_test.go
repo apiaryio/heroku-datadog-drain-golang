@@ -119,7 +119,7 @@ func TestFull(t *testing.T) {
     s.out = make(chan *logMetrics)
     defer close(s.out)
 
-    addr := "localhost:1201"
+    addr := "localhost:10111"
     udpAddr, err := net.ResolveUDPAddr("udp", addr)
     if err != nil {
         t.Fatal(err)

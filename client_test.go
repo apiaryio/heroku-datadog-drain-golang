@@ -1,6 +1,7 @@
 package main
 
 import (
+    log "github.com/Sirupsen/logrus"
     "net"
     "testing"
 )
@@ -69,7 +70,9 @@ var statsdTests = []struct {
 
 func TestStatsdClient(t *testing.T) {
 
-    addr := "localhost:1201"
+    log.SetLevel(log.DebugLevel)
+
+    addr := "localhost:10111"
     udpAddr, err := net.ResolveUDPAddr("udp", addr)
     if err != nil {
         t.Fatal(err)
