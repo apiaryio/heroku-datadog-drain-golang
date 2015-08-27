@@ -88,6 +88,7 @@ func TestStatsdClient(t *testing.T) {
     if err != nil {
         t.Fatal(err)
     }
+
     out := make(chan *logMetrics)
     defer close(out)
     go c.sendToStatsd(out)
