@@ -92,10 +92,19 @@ func (c *Client) sendRouterMsg(data *logMetrics) {
 		return
 	}
 
-	c.Histogram(*data.prefix+"heroku.router.request.connect", conn, tags, sampleRate)
-	c.Histogram(*data.prefix+"heroku.router.request.service", serv, tags, sampleRate)
+	err = c.Histogram(*data.prefix+"heroku.router.request.connect", conn, tags, sampleRate)
+	if err != nil {
+		log.WithField("error", err).Info("Failed to send Histogram")
+	}
+	err = c.Histogram(*data.prefix+"heroku.router.request.service", serv, tags, sampleRate)
+	if err != nil {
+		log.WithField("error", err).Info("Failed to send Histogram")
+	}
 	if data.metrics["at"].Val == "error" {
-		c.Count(*data.prefix+"heroku.router.error", 1, tags, 0.1)
+		err = c.Count(*data.prefix+"heroku.router.error", 1, tags, 0.1)
+		if err != nil {
+			log.WithField("error", err).Info("Failed to send Count")
+		}
 	}
 }
 
@@ -119,7 +128,10 @@ func (c *Client) sendSampleMsg(data *logMetrics) {
 			m := strings.Replace(strings.Split(k, "#")[1], "_", ".", -1)
 			vnum, err := strconv.ParseFloat(v.Val, 10)
 			if err == nil {
-				c.Histogram(*data.prefix+"heroku.dyno."+m, vnum, tags, sampleRate)
+				err = c.Histogram(*data.prefix+"heroku.dyno."+m, vnum, tags, sampleRate)
+				if err != nil {
+					log.WithField("error", err).Info("Failed to send Histogram")
+				}
 			} else {
 				log.WithFields(log.Fields{
 					"type":   "sample",
@@ -144,7 +156,10 @@ func (c *Client) sendScalingMsg(data *logMetrics) {
 		if v, ok := data.metrics[mk]; ok {
 			vnum, err := strconv.ParseFloat(v.Val, 10)
 			if err == nil {
-				c.Gauge(*data.prefix+"heroku.dyno."+mk, vnum, tags, sampleRate)
+				err = c.Gauge(*data.prefix+"heroku.dyno."+mk, vnum, tags, sampleRate)
+				if err != nil {
+					log.WithField("error", err).Info("Failed to send Gauge")
+				}
 			} else {
 				log.WithFields(log.Fields{
 					"type":   "scaling",
