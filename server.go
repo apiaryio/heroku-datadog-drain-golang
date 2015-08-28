@@ -52,7 +52,7 @@ func loadServerCtx() *ServerCtx {
 		make(map[string]string),
 		make(map[string][]string),
 		make(map[string]string),
-		"statsd://localhost:8125",
+		"localhost:8125",
 		false,
 		nil,
 		nil,
@@ -77,7 +77,12 @@ func loadServerCtx() *ServerCtx {
 			if tags != "" {
 				s.AppTags[app] = strings.Split(tags, ",")
 			}
-			s.AppPrefix[app] = os.Getenv(name + "_PREFIX")
+			prefix := os.Getenv(name + "_PREFIX")
+			if strings.Index(prefix, ".") == -1 {
+				s.AppPrefix[app] = prefix + "."
+			} else {
+				s.AppPrefix[app] = prefix
+			}
 		}
 	} else {
 		log.Warn("No Allowed apps set, nobody can access this service!")
