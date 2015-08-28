@@ -67,16 +67,17 @@ func loadServerCtx() *ServerCtx {
 		apps := strings.Split(allApps, ",")
 		log.WithField("apps", apps).Info("ALLOWED_APPS loaded.")
 		for _, app := range apps {
+			name := strings.ToUpper(app)
 			s.AllowedApps = append(s.AllowedApps, app)
-			s.AppPasswd[app] = os.Getenv(app + "_PASSWORD")
+			s.AppPasswd[app] = os.Getenv(name + "_PASSWORD")
 			if s.AppPasswd[app] == "" {
 				log.WithField("app", app).Warn("App is allowed but no password set")
 			}
-			tags := os.Getenv(app + "_TAGS")
+			tags := os.Getenv(name + "_TAGS")
 			if tags != "" {
 				s.AppTags[app] = strings.Split(tags, ",")
 			}
-			s.AppPrefix[app] = os.Getenv(app + "_PREFIX")
+			s.AppPrefix[app] = os.Getenv(name + "_PREFIX")
 		}
 	} else {
 		log.Warn("No Allowed apps set, nobody can access this service!")
@@ -94,7 +95,7 @@ func loadServerCtx() *ServerCtx {
 	log.WithFields(log.Fields{
 		"port":         s.Port,
 		"AlloweApps":   s.AllowedApps,
-		"AppPasswords": s.AppPasswd,
+		"AppPasswords": "************",
 		"AppTags":      s.AppTags,
 		"AppPrefix":    s.AppPrefix,
 		"StatsdUrl":    s.StatsdUrl,
