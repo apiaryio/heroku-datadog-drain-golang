@@ -41,6 +41,15 @@ var fullTests = []struct {
 			"heroku.dyno.web:3.000000|g",
 		},
 	},
+	{
+		cnt: 3,
+		Req: `222 <134>1 2015-04-07T16:01:43.517062+00:00 host app web.1 - info: responseLogger: metric#route=/parser metric#request_id=11747467-f4ce-4b06-8c99-92be968a02e3 metric#request_length=541 metric#response_length=5163 metric#parser_time=5ms`,
+		Expected: []string{
+			"app.metric.request_length:541|h|#route=/parser,request_id=11747467-f4ce-4b06-8c99-92be968a02e3",
+			"app.metric.response_length:5163|h|#route=/parser,request_id=11747467-f4ce-4b06-8c99-92be968a02e3",
+			"app.metric.parser_time:5.000000|h|#route=/parser,request_id=11747467-f4ce-4b06-8c99-92be968a02e3",
+		},
+	},
 }
 
 func TestStatusRequest(t *testing.T) {
