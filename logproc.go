@@ -65,6 +65,7 @@ func logProcess(in chan *logData, out chan *logMetrics) {
 			return
 		}
 
+		log.Debugln(*data.line)
 		output := strings.Split(*data.line, " - ")
 		if len(output) < 2 {
 			continue
@@ -84,6 +85,10 @@ func logProcess(in chan *logData, out chan *logMetrics) {
 			} else {
 				parseMetrics(sampleMsg, data, &output[1], out)
 			}
+		} else if headers[1] == "app" {
+			tags := append(*data.tags, "source:"+headers[2])
+			data.tags = &tags
+			parseMetrics(metricsMsg, data, &output[1], out)
 		}
 	}
 }
