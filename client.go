@@ -14,6 +14,7 @@ const (
 	routerMsg int = iota
 	scalingMsg
 	sampleMsg
+	metricsMsg
 )
 
 var routerMetricsKeys = []string{"dyno", "method", "status", "path", "host", "code", "desc", "at"}
@@ -52,8 +53,12 @@ func (c *Client) sendToStatsd(in chan *logMetrics) {
 			c.sendRouterMsg(data)
 		} else if data.typ == sampleMsg {
 			c.sendSampleMsg(data)
-		} else {
+		} else if data.typ == scalingMsg {
 			c.sendScalingMsg(data)
+		} else if data.typ == metricsMsg {
+			c.sendMetricsMsg(data)
+		} else {
+			log.WithField("type", data.typ).Warn("Unknown log message")
 		}
 	}
 }
@@ -118,9 +123,9 @@ func (c *Client) sendSampleMsg(data *logMetrics) {
 	}
 
 	log.WithFields(log.Fields{
-		"app":    data.app,
-		"tags":   data.tags,
-		"prefix": data.prefix,
+		"app":    *data.app,
+		"tags":   tags,
+		"prefix": *data.prefix,
 	}).Debug("sendSampleMsg")
 
 	for k, v := range data.metrics {
@@ -147,9 +152,9 @@ func (c *Client) sendScalingMsg(data *logMetrics) {
 	tags := *data.tags
 
 	log.WithFields(log.Fields{
-		"app":    data.app,
-		"tags":   data.tags,
-		"prefix": data.prefix,
+		"app":    *data.app,
+		"tags":   tags,
+		"prefix": *data.prefix,
 	}).Debug("sendScalingMsg")
 
 	for _, mk := range scalingMetricsKeys {
@@ -166,6 +171,46 @@ func (c *Client) sendScalingMsg(data *logMetrics) {
 					"metric": mk,
 					"err":    err,
 				}).Info("Could not parse metric value")
+			}
+		}
+	}
+}
+
+func (c *Client) sendMetricsMsg(data *logMetrics) {
+
+	tags := *data.tags
+	for k, v := range data.metrics {
+		if strings.Index(k, "#") != -1 {
+			if _, err := strconv.Atoi(v.Val); err != nil {
+				m := strings.Replace(strings.Split(k, "#")[1], "_", ".", -1)
+				tags = append(tags, m+":"+v.Val)
+			}
+		}
+	}
+
+	log.WithFields(log.Fields{
+		"app":    *data.app,
+		"tags":   tags,
+		"prefix": *data.prefix,
+	}).Debug("sendMetricMsg")
+
+	for k, v := range data.metrics {
+		if strings.Index(k, "#") != -1 {
+			if _, err := strconv.Atoi(v.Val); err == nil {
+				m := strings.Replace(strings.Split(k, "#")[1], "_", ".", -1)
+				vnum, err := strconv.ParseFloat(v.Val, 10)
+				if err == nil {
+					err = c.Histogram(*data.prefix+"app.metric."+m, vnum, tags, sampleRate)
+					if err != nil {
+						log.WithField("error", err).Info("Failed to send Histogram")
+					}
+				} else {
+					log.WithFields(log.Fields{
+						"type":   "metrics",
+						"metric": k,
+						"err":    err,
+					}).Info("Could not parse metric value")
+				}
 			}
 		}
 	}
