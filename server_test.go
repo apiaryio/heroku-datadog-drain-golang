@@ -176,7 +176,13 @@ func TestFull(t *testing.T) {
 				t.Fatal(err)
 			}
 			message := data[:n]
-			if string(message) != tt.Expected[i] {
+			findEqual := false
+			for j:= 0; j < len(tt.Expected); j++ {
+				if string(message) == tt.Expected[j] {
+					findEqual = true
+				}
+			}
+			if findEqual == false {
 				t.Errorf("Expected: %s. Actual: %s", tt.Expected[i], string(message))
 			}
 		}
