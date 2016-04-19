@@ -1,0 +1,22 @@
+package: github.com/apiaryio/heroku-datadog-drain-golang
+import:
+- package: github.com/DataDog/datadog-go
+  version: a27810dd518c69be741a7fd5d0e39f674f615be8
+  subpackages:
+  - statsd
+- package: github.com/Sirupsen/logrus
+  version: 0f2a4955b11372eec5a4b95d907eaf8379b835d0
+- package: github.com/gin-gonic/gin
+  version: 704d690ac0e25fcd060ff82f75f913e879e65a3c
+- package: github.com/kr/logfmt
+  version: b84e30acd515aadc4b783ad4ff83aff3299bdfe0
+- package: github.com/manucorporat/sse
+  version: fe6ea2c8e398672518ef204bf0fbd9af858d0e15
+- package: github.com/mattn/go-colorable
+  version: 40e4aedc8fabf8c23e040057540867186712faa5
+- package: golang.org/x/net
+  version: 84ba27dd5b2d8135e9da1395277f2c9333a2ffda
+  subpackages:
+  - context
+- package: gopkg.in/bluesuncorp/validator.v5
+  version: 98121ac23ff3d764f525d18d8de944d150e3c0fe

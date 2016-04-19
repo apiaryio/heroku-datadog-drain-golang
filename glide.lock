@@ -1,0 +1,35 @@
+hash: 53787968e50ff842e72bd675709994012a4cbe43c51efc528d6cd616efc3d621
+updated: 2016-04-19T16:04:52.077748817+02:00
+imports:
+- name: github.com/bugsnag/bugsnag-go
+  version: 0f2f8c51981c9507be53db10e553d0542498d7ca
+- name: github.com/DataDog/datadog-go
+  version: a27810dd518c69be741a7fd5d0e39f674f615be8
+  subpackages:
+  - statsd
+- name: github.com/gin-gonic/gin
+  version: 704d690ac0e25fcd060ff82f75f913e879e65a3c
+  subpackages:
+  - binding
+  - render
+- name: github.com/kr/logfmt
+  version: b84e30acd515aadc4b783ad4ff83aff3299bdfe0
+- name: github.com/manucorporat/sse
+  version: fe6ea2c8e398672518ef204bf0fbd9af858d0e15
+- name: github.com/mattn/go-colorable
+  version: 40e4aedc8fabf8c23e040057540867186712faa5
+- name: github.com/mattn/go-isatty
+  version: 56b76bdf51f7708750eac80fa38b952bb9f32639
+- name: github.com/Sirupsen/logrus
+  version: 0f2a4955b11372eec5a4b95d907eaf8379b835d0
+- name: golang.org/x/net
+  version: 84ba27dd5b2d8135e9da1395277f2c9333a2ffda
+  subpackages:
+  - context
+- name: golang.org/x/sys
+  version: f64b50fbea64174967a8882830d621a18ee1548e
+  subpackages:
+  - unix
+- name: gopkg.in/bluesuncorp/validator.v5
+  version: 98121ac23ff3d764f525d18d8de944d150e3c0fe
+devImports: []
