@@ -29,5 +29,5 @@ ALLOWED_APPS=my-app,..    # Required. Comma seperated list of app names
 <APP-NAME>_TAGS=mytag,..  # Optional. Comma seperated list of default tags for each app
 <APP-NAME>_PREFIX=yee     # Optional. String to be prepended to all metrics from a given app
 STATSD_URL=..             # Optional. Default: statsd://localhost:8125
-DEBUG=                    # Optional. If DEBUG is set, a lot of stuff will be logged :)
+DATADOG_DRAIN_DEBUG=      # Optional. If DEBUG is set, a lot of stuff will be logged :)
 ```
