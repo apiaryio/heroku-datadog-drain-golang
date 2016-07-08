@@ -20,6 +20,7 @@ const (
 var routerMetricsKeys = []string{"dyno", "method", "status", "path", "host", "code", "desc", "at"}
 var sampleMetricsKeys = []string{"source"}
 var scalingMetricsKeys = []string{"mailer", "web"}
+var customMetricsKeys = []string{"media_type", "output_type", "route"}
 
 type Client struct {
 	*statsd.Client
@@ -176,15 +177,13 @@ func (c *Client) sendScalingMsg(data *logMetrics) {
 	}
 }
 
-func (c *Client) sendMetricsMsg(data *logMetrics) {
 
+func (c *Client) sendMetricsMsg(data *logMetrics) {
 	tags := *data.tags
-	for k, v := range data.metrics {
-		if strings.Index(k, "#") != -1 {
-			if _, err := strconv.Atoi(v.Val); err != nil {
-				m := strings.Replace(strings.Split(k, "#")[1], "_", ".", -1)
-				tags = append(tags, m+":"+v.Val)
-			}
+
+	for _, mk := range customMetricsKeys {
+		if v, ok := data.metrics[mk]; ok {
+			tags = append(tags, mk+":"+v.Val)
 		}
 	}
 
