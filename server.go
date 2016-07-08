@@ -89,7 +89,7 @@ func loadServerCtx() *ServerCtx {
 	}
 
 	statsd := os.Getenv("STATSD_URL")
-	if port != "" {
+	if statsd != "" {
 		s.StatsdUrl = statsd
 	}
 
