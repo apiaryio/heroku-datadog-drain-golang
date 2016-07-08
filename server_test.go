@@ -43,11 +43,12 @@ var fullTests = []struct {
 	},
 	{
 		cnt: 3,
-		Req: `222 <134>1 2015-04-07T16:01:43.517062+00:00 host app web.1 - info: responseLogger: metric#route=/parser metric#request_id=11747467-f4ce-4b06-8c99-92be968a02e3 metric#request_length=541 metric#response_length=5163 metric#parser_time=5ms`,
+		Req: `222 <134>1 2015-04-07T16:01:43.517062+00:00 host app web.1 - info: responseLogger: metric#route=/parser metric#request_id=11747467-f4ce-4b06-8c99-92be968a02e3 metric#request_length=541 metric#response_length=5163 metric#parser_time=5ms metric#eventloop.avg_ms=1.589123`,
 		Expected: []string{
-			"app.metric.request.length:541.000000|h|#source:web.1,route:/parser,request.id:11747467-f4ce-4b06-8c99-92be968a02e3",
-			"app.metric.response.length:5163.000000|h|#source:web.1,route:/parser,request.id:11747467-f4ce-4b06-8c99-92be968a02e3",
-			"app.metric.parser.time:5.000000|h|#source:web.1,route:/parser,request.id:11747467-f4ce-4b06-8c99-92be968a02e3",
+			"app.metric.request.length:541.000000|h|#source:web.1,route:/parser",
+			"app.metric.response.length:5163.000000|h|#source:web.1,route:/parser",
+			"app.metric.parser.time:5.000000|h|#source:web.1,route:/parser",
+			"app.metric.eventloop.avg.ms:1.589123|h|#source:web.1,route:/parser",
 		},
 	},
 }
@@ -177,7 +178,7 @@ func TestFull(t *testing.T) {
 			}
 			message := data[:n]
 			findEqual := false
-			for j:= 0; j < len(tt.Expected); j++ {
+			for j := 0; j < len(tt.Expected); j++ {
 				if string(message) == tt.Expected[j] {
 					findEqual = true
 				}
