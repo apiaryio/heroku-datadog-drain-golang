@@ -88,7 +88,7 @@ func logProcess(in chan *logData, out chan *logMetrics) {
 		} else if headers[1] == "app" {
 			tags := append(*data.tags, "source:"+headers[2])
 			data.tags = &tags
-			parseMetrics(metricsMsg, data, &output[1], out)
+			parseMetrics(metricsTag, data, &output[1], out)
 		}
 	}
 }

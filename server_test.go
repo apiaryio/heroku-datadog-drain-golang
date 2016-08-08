@@ -43,7 +43,7 @@ var fullTests = []struct {
 	},
 	{
 		cnt: 3,
-		Req: `222 <134>1 2015-04-07T16:01:43.517062+00:00 host app web.1 - info: responseLogger: metric#route=/parser metric#request_id=11747467-f4ce-4b06-8c99-92be968a02e3 metric#request_length=541 metric#response_length=5163 metric#parser_time=5ms metric#eventloop.avg_ms=1.589123`,
+		Req: `222 <134>1 2015-04-07T16:01:43.517062+00:00 host app web.1 - info: responseLogger: metric#tag#route=/parser metric#request_id=11747467-f4ce-4b06-8c99-92be968a02e3 metric#request_length=541 metric#response_length=5163 metric#parser_time=5ms metric#eventloop.avg_ms=1.589123`,
 		Expected: []string{
 			"app.metric.request.length:541.000000|h|#source:web.1,route:/parser",
 			"app.metric.response.length:5163.000000|h|#source:web.1,route:/parser",

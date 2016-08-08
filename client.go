@@ -15,6 +15,7 @@ const (
 	scalingMsg
 	sampleMsg
 	metricsMsg
+	metricsTag
 )
 
 var routerMetricsKeys = []string{"dyno", "method", "status", "path", "host", "code", "desc", "at"}
@@ -58,6 +59,8 @@ func (c *Client) sendToStatsd(in chan *logMetrics) {
 			c.sendScalingMsg(data)
 		} else if data.typ == metricsMsg {
 			c.sendMetricsMsg(data)
+		} else if data.typ == metricsTag {
+			c.sendMetricsWithTags(data)
 		} else {
 			log.WithField("type", data.typ).Warn("Unknown log message")
 		}
@@ -200,6 +203,49 @@ Tags:
 		"tags":   tags,
 		"prefix": *data.prefix,
 	}).Debug("sendMetricMsg")
+
+	for k, v := range data.metrics {
+		if strings.Index(k, "#") != -1 {
+			if vnum, err := strconv.ParseFloat(v.Val, 10); err == nil {
+				m := strings.Replace(strings.Split(k, "#")[1], "_", ".", -1)
+				err = c.Histogram(*data.prefix+"app.metric."+m, vnum, tags, sampleRate)
+				if err != nil {
+					log.WithField("error", err).Warning("Failed to send Histogram")
+				}
+			} else {
+				log.WithFields(log.Fields{
+					"type":   "metrics",
+					"metric": k,
+					"err":    err,
+				}).Debug("Could not parse metric value")
+			}
+		}
+	}
+}
+
+func (c *Client) sendMetricsWithTags(data *logMetrics) {
+	tags := *data.tags
+
+Tags:
+	for k, v := range data.metrics {
+		if strings.Index(k, "tag#") != -1 {
+			if _, err := strconv.Atoi(v.Val); err != nil {
+				m := strings.Replace(strings.Split(k, "tag#")[1], "_", ".", -1)
+				for _, mk := range customMetricsKeys {
+					if m == mk {
+						tags = append(tags, mk+":"+v.Val)
+						continue Tags
+					}
+				}
+			}
+		}
+	}
+
+	log.WithFields(log.Fields{
+		"app":    *data.app,
+		"tags":   tags,
+		"prefix": *data.prefix,
+	}).Debug("sendMetricTag")
 
 	for k, v := range data.metrics {
 		if strings.Index(k, "#") != -1 {
