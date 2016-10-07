@@ -43,7 +43,7 @@ type ServerCtx struct {
 //<APP-NAME>_PREFIX=yee     Optional.
 //String to be prepended to all metrics from a given app
 
-//STATSD_URL=..  Optional. Default: statsd://localhost:8125
+//STATSD_URL=..  Required. Default: localhost:8125
 //DATADOG_DRAIN_DEBUG=         Optional. If DEBUG is set, a lot of stuff w
 func loadServerCtx() *ServerCtx {
 
