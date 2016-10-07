@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"regexp"
 	"strings"
 
 	log "github.com/Sirupsen/logrus"
@@ -20,6 +21,8 @@ type logMetrics struct {
 	prefix  *string
 	metrics map[string]logValue
 }
+
+var dynoNumber *regexp.Regexp = regexp.MustCompile(`\.\d+$`)
 
 func (lm *logMetrics) HandleLogfmt(key, val []byte) error {
 
@@ -49,6 +52,10 @@ func parseMetrics(typ int, ld *logData, data *string, out chan *logMetrics) {
 	lm := logMetrics{typ, ld.app, ld.tags, ld.prefix, make(map[string]logValue, 5)}
 	if err := logfmt.Unmarshal([]byte(*data), &lm); err != nil {
 		log.Fatalf("err=%q", err)
+	}
+	if source, ok := lm.metrics["source"]; ok {
+		tags := append(*lm.tags, "type:"+dynoNumber.ReplaceAllString(source.Val, ""))
+		lm.tags = &tags
 	}
 	out <- &lm
 }
@@ -86,7 +93,8 @@ func logProcess(in chan *logData, out chan *logMetrics) {
 				parseMetrics(sampleMsg, data, &output[1], out)
 			}
 		} else if headers[1] == "app" {
-			tags := append(*data.tags, "source:"+headers[2])
+			dynoType := dynoNumber.ReplaceAllString(headers[2], "")
+			tags := append(*data.tags, "source:"+headers[2], "type:"+dynoType)
 			data.tags = &tags
 			parseMetrics(metricsTag, data, &output[1], out)
 		}
