@@ -30,7 +30,7 @@ var fullTests = []struct {
 		cnt: 1,
 		Req: `229 <45>1 2015-04-02T11:48:16.839257+00:00 host heroku web.1 - source=web.1 dyno=heroku.35930502.b9de5fce-44b7-4287-99a7-504519070cba sample#load_avg_1m=0.01`,
 		Expected: []string{
-			"heroku.dyno.load.avg.1m:0.010000|g|#source:web.1",
+			"heroku.dyno.load.avg.1m:0.010000|g|#type:web,source:web.1",
 		},
 	},
 	{
@@ -45,15 +45,15 @@ var fullTests = []struct {
 		cnt: 9,
 		Req: `452 <134>1 2015-04-07T16:01:43.517062+00:00 host app web.1 - info: responseLogger: metric#tag#route=/parser metric#request_id=11747467-f4ce-4b06-8c99-92be968a02e3 metric#request_length=541 metric#response_length=5163 metric#parser_time=5ms metric#eventLoop.count=606 metric#eventLoop.avg_ms=515.503300330033 metric#eventLoop.p50_ms=0.8805309734513275 metric#eventLoop.p95_ms=3457.206896551724 metric#eventLoop.p99_ms=3457.206896551724 metric#eventLoop.max_ms=5008`,
 		Expected: []string{
-			"app.metric.request.length:541.000000|g|#source:web.1,route:/parser",
-			"app.metric.response.length:5163.000000|g|#source:web.1,route:/parser",
-			"app.metric.parser.time:5.000000|g|#source:web.1,route:/parser",
-			"app.metric.eventLoop.count:606.000000|g|#source:web.1,route:/parser",
-			"app.metric.eventLoop.avg.ms:515.503300|g|#source:web.1,route:/parser",
-			"app.metric.eventLoop.p50.ms:0.880531|g|#source:web.1,route:/parser",
-			"app.metric.eventLoop.p95.ms:3457.206897|g|#source:web.1,route:/parser",
-			"app.metric.eventLoop.p99.ms:3457.206897|g|#source:web.1,route:/parser",
-			"app.metric.eventLoop.max.ms:5008.000000|g|#source:web.1,route:/parser",
+			"app.metric.request.length:541.000000|g|#source:web.1,type:web,route:/parser",
+			"app.metric.response.length:5163.000000|g|#source:web.1,type:web,route:/parser",
+			"app.metric.parser.time:5.000000|g|#source:web.1,type:web,route:/parser",
+			"app.metric.eventLoop.count:606.000000|g|#source:web.1,type:web,route:/parser",
+			"app.metric.eventLoop.avg.ms:515.503300|g|#source:web.1,type:web,route:/parser",
+			"app.metric.eventLoop.p50.ms:0.880531|g|#source:web.1,type:web,route:/parser",
+			"app.metric.eventLoop.p95.ms:3457.206897|g|#source:web.1,type:web,route:/parser",
+			"app.metric.eventLoop.p99.ms:3457.206897|g|#source:web.1,type:web,route:/parser",
+			"app.metric.eventLoop.max.ms:5008.000000|g|#source:web.1,type:web,route:/parser",
 		},
 	},
 }
