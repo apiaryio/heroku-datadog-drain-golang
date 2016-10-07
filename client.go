@@ -137,9 +137,9 @@ func (c *Client) sendSampleMsg(data *logMetrics) {
 			m := strings.Replace(strings.Split(k, "#")[1], "_", ".", -1)
 			vnum, err := strconv.ParseFloat(v.Val, 10)
 			if err == nil {
-				err = c.Histogram(*data.prefix+"heroku.dyno."+m, vnum, tags, sampleRate)
+				err = c.Gauge(*data.prefix+"heroku.dyno."+m, vnum, tags, sampleRate)
 				if err != nil {
-					log.WithField("error", err).Info("Failed to send Histogram")
+					log.WithField("error", err).Info("Failed to send Gauge")
 				}
 			} else {
 				log.WithFields(log.Fields{
@@ -208,9 +208,9 @@ Tags:
 		if strings.Index(k, "#") != -1 {
 			if vnum, err := strconv.ParseFloat(v.Val, 10); err == nil {
 				m := strings.Replace(strings.Split(k, "#")[1], "_", ".", -1)
-				err = c.Histogram(*data.prefix+"app.metric."+m, vnum, tags, sampleRate)
+				err = c.Gauge(*data.prefix+"app.metric."+m, vnum, tags, sampleRate)
 				if err != nil {
-					log.WithField("error", err).Warning("Failed to send Histogram")
+					log.WithField("error", err).Warning("Failed to send Gauge")
 				}
 			} else {
 				log.WithFields(log.Fields{
@@ -251,9 +251,9 @@ Tags:
 		if strings.Index(k, "#") != -1 {
 			if vnum, err := strconv.ParseFloat(v.Val, 10); err == nil {
 				m := strings.Replace(strings.Split(k, "#")[1], "_", ".", -1)
-				err = c.Histogram(*data.prefix+"app.metric."+m, vnum, tags, sampleRate)
+				err = c.Gauge(*data.prefix+"app.metric."+m, vnum, tags, sampleRate)
 				if err != nil {
-					log.WithField("error", err).Warning("Failed to send Histogram")
+					log.WithField("error", err).Warning("Failed to send Gauge")
 				}
 			} else {
 				log.WithFields(log.Fields{

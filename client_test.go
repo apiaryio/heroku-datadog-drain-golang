@@ -45,7 +45,7 @@ var statsdTests = []struct {
 			},
 		},
 		Expected: []string{
-			"prefix.heroku.dyno.load.avg.1m:0.010000|h|#tag1,tag2,source:web1",
+			"prefix.heroku.dyno.load.avg.1m:0.010000|g|#tag1,tag2,source:web1",
 		},
 	},
 	{
