@@ -6,33 +6,50 @@ Golang version of [NodeJS](https://github.com/ozinc/heroku-datadog-drain)
 
 Funnel metrics from multiple Heroku apps into DataDog using statsd.
 
-Supported Heroku metrics:
+## Supported Heroku metrics:
+
 - Heroku Router response times, status codes, etc.
 - Application errors
+- Custom metrics
 - Heroku Dyno [runtime metrics](https://devcenter.heroku.com/articles/log-runtime-metrics)
 
 ## Get Started
+
+### Clone the Github repository
+
 ```bash
-# Clone the Github repo.
 git clone git@github.com:apiaryio/heroku-datadog-drain-golang.git
 cd heroku-datadog-drain-golang
+```
 
-# Setup Heroku, specify the app(s) you'll be monitoring and create a password for each.
+### Setup Heroku, specify the app(s) you'll be monitoring and create a password for each.
+
+```
 heroku create
 heroku config:set ALLOWED_APPS=<your-app-slug> <YOUR-APP-SLUG>_PASSWORD=<password>
+```
 
-# OPTIONAL: Setup Heroku build packs, including the Datadog DogStatsD client.
-# If you already have a StatsD client running, see the STATSD_URL configuration option below.
+> **OPTIONAL**: Setup Heroku build packs, including the Datadog DogStatsD client.
+If you already have a StatsD client running, see the STATSD_URL configuration option below.
+
+
+```
 heroku buildpacks:add heroku/go
 heroku buildpacks:add --index 1 https://github.com/miketheman/heroku-buildpack-datadog.git
 heroku config:set HEROKU_APP_NAME=$(heroku apps:info|grep ===|cut -d' ' -f2)
 heroku config:add DATADOG_API_KEY=<your-Datadog-API-key>
+```
 
-# Deploy to Heroku.
+### Deploy to Heroku.
+
+```
 git push heroku master
 heroku ps:scale web=1
+```
 
-# Add the Heroku log drain using the app slug and password created above.
+### Add the Heroku log drain using the app slug and password created above.
+
+```
 heroku drains:add https://<your-app-slug>:<password>@<this-log-drain-app-slug>.herokuapp.com/ --app <your-app-slug>
 ```
 
@@ -47,3 +64,22 @@ ALLOWED_APPS=my-app,..    # Required. Comma seperated list of app names
 DATADOG_DRAIN_DEBUG=..    # Optional. If DEBUG is set, a lot of stuff will be logged :)
 ```
 Note that the capitalized `<APP-NAME>` and `<YOUR-APP-SLUG>` appearing above indicate that your application name and slug should also be in full caps. For example, to set the password for an application named `my-app`, you would need to specify `heroku config:set ALLOWED_APPS=my-app MY-APP_PASSWORD=example_password`
+
+## Heroku settings
+
+You need use Standard dynos and better and enable `log-runtime-metrics` in heroku labs for every application.
+
+```bash
+heroku labs:enable log-runtime-metrics -a APP_NAME
+```
+
+This adds basic metrics (cpu, memory etc.) into logs.
+
+## Custom Metrics
+
+If you want to log some custom metrics just format the log line like following:
+
+```
+app web.1 - info: responseLogger: metric#tag#route=/parser metric#request_id=11747467-f4ce-4b06-8c99-92be968a02e3 metric#request_length=541 metric#response_length=5163 metric#parser_time=5ms metric#eventLoop.count=606 metric#eventLoop.avg_ms=515.503300330033 metric#eventLoop.p50_ms=0.8805309734513275 metric#eventLoop.p95_ms=3457.206896551724 metric#eventLoop.p99_ms=3457.206896551724 metric#eventLoop.max_ms=5008
+```
+We support `metric#` for values and `metric#tag` for tags.
