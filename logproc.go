@@ -51,7 +51,10 @@ func parseMetrics(typ int, ld *logData, data *string, out chan *logMetrics) {
 
 	lm := logMetrics{typ, ld.app, ld.tags, ld.prefix, make(map[string]logValue, 5)}
 	if err := logfmt.Unmarshal([]byte(*data), &lm); err != nil {
-		log.Fatalf("err=%q", err)
+		log.WithFields(log.Fields{
+			"err": err,
+		}).Warn()
+		return
 	}
 	if source, ok := lm.metrics["source"]; ok {
 		tags := append(*lm.tags, "type:"+dynoNumber.ReplaceAllString(source.Val, ""))
