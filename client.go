@@ -14,7 +14,6 @@ const (
 	routerMsg int = iota
 	scalingMsg
 	sampleMsg
-	metricsMsg
 	metricsTag
 )
 
@@ -25,12 +24,13 @@ var customMetricsKeys = []string{"media_type", "output_type", "route"}
 
 type Client struct {
 	*statsd.Client
+	ExcludedTags map[string]bool
 }
 
 func statsdClient(addr string) (*Client, error) {
 
 	c, err := statsd.New(addr)
-	return &Client{c}, err
+	return &Client{c, make(map[string]bool)}, err
 }
 
 func (c *Client) sendToStatsd(in chan *logMetrics) {
@@ -57,8 +57,6 @@ func (c *Client) sendToStatsd(in chan *logMetrics) {
 			c.sendSampleMsg(data)
 		} else if data.typ == scalingMsg {
 			c.sendScalingMsg(data)
-		} else if data.typ == metricsMsg {
-			c.sendMetricsMsg(data)
 		} else if data.typ == metricsTag {
 			c.sendMetricsWithTags(data)
 		} else {
@@ -67,14 +65,20 @@ func (c *Client) sendToStatsd(in chan *logMetrics) {
 	}
 }
 
-func (c *Client) sendRouterMsg(data *logMetrics) {
-
-	tags := *data.tags
-	for _, mk := range routerMetricsKeys {
-		if v, ok := data.metrics[mk]; ok {
+func (c *Client) extractTags(tags []string, permittedTags []string, metrics map[string]logValue) []string {
+	for _, mk := range permittedTags {
+		if c.ExcludedTags[mk] {
+			continue
+		}
+		if v, ok := metrics[mk]; ok {
 			tags = append(tags, mk+":"+v.Val)
 		}
 	}
+	return tags
+}
+
+func (c *Client) sendRouterMsg(data *logMetrics) {
+	tags := c.extractTags(*data.tags, routerMetricsKeys, data.metrics)
 
 	log.WithFields(log.Fields{
 		"app":    *data.app,
@@ -118,13 +122,7 @@ func (c *Client) sendRouterMsg(data *logMetrics) {
 }
 
 func (c *Client) sendSampleMsg(data *logMetrics) {
-
-	tags := *data.tags
-	for _, mk := range sampleMetricsKeys {
-		if v, ok := data.metrics[mk]; ok {
-			tags = append(tags, mk+":"+v.Val)
-		}
-	}
+	tags := c.extractTags(*data.tags, sampleMetricsKeys, data.metrics)
 
 	log.WithFields(log.Fields{
 		"app":    *data.app,
@@ -175,49 +173,6 @@ func (c *Client) sendScalingMsg(data *logMetrics) {
 					"metric": mk,
 					"err":    err,
 				}).Info("Could not parse metric value")
-			}
-		}
-	}
-}
-
-func (c *Client) sendMetricsMsg(data *logMetrics) {
-	tags := *data.tags
-
-Tags:
-	for k, v := range data.metrics {
-		if strings.Index(k, "#") != -1 {
-			if _, err := strconv.Atoi(v.Val); err != nil {
-				m := strings.Replace(strings.Split(k, "#")[1], "_", ".", -1)
-				for _, mk := range customMetricsKeys {
-					if m == mk {
-						tags = append(tags, mk+":"+v.Val)
-						continue Tags
-					}
-				}
-			}
-		}
-	}
-
-	log.WithFields(log.Fields{
-		"app":    *data.app,
-		"tags":   tags,
-		"prefix": *data.prefix,
-	}).Debug("sendMetricMsg")
-
-	for k, v := range data.metrics {
-		if strings.Index(k, "#") != -1 {
-			if vnum, err := strconv.ParseFloat(v.Val, 10); err == nil {
-				m := strings.Replace(strings.Split(k, "#")[1], "_", ".", -1)
-				err = c.Gauge(*data.prefix+"app.metric."+m, vnum, tags, sampleRate)
-				if err != nil {
-					log.WithField("error", err).Warning("Failed to send Gauge")
-				}
-			} else {
-				log.WithFields(log.Fields{
-					"type":   "metrics",
-					"metric": k,
-					"err":    err,
-				}).Debug("Could not parse metric value")
 			}
 		}
 	}
