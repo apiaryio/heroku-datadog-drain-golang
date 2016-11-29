@@ -151,6 +151,12 @@ func main() {
 		log.WithField("statsdUrl", s.StatsdUrl).Fatal("Could not connect to statsd")
 	}
 
+	if v := os.Getenv("EXCLUDED_TAGS"); v != "" {
+		for _, t := range strings.Split(v, ",") {
+			c.ExcludedTags[t] = true
+		}
+	}
+
 	r := gin.Default()
 	r.GET("/status", func(c *gin.Context) {
 		c.String(200, "OK")

@@ -23,8 +23,10 @@ var statsdTests = []struct {
 			&prefix,
 			map[string]logValue{
 				"at":      {"info", ""},
+				"path":    {"/foo", ""},
 				"connect": {"1", "ms"},
 				"service": {"37", "ms"},
+				"garbage": {"bar", ""},
 			},
 		},
 		Expected: []string{
@@ -85,6 +87,9 @@ func TestStatsdClient(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+
+	// c.ExcludedTags = map[string]bool{"path": true}
+	c.ExcludedTags["path"] = true
 
 	out := make(chan *logMetrics)
 	defer close(out)
