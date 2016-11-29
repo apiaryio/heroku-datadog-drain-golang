@@ -88,7 +88,6 @@ func TestStatsdClient(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	// c.ExcludedTags = map[string]bool{"path": true}
 	c.ExcludedTags["path"] = true
 
 	out := make(chan *logMetrics)
