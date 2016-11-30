@@ -20,6 +20,7 @@ type logMetrics struct {
 	tags    *[]string
 	prefix  *string
 	metrics map[string]logValue
+	events  []string
 }
 
 var dynoNumber *regexp.Regexp = regexp.MustCompile(`\.\d+$`)
@@ -48,8 +49,14 @@ func isDigit(r rune) bool {
 }
 
 func parseMetrics(typ int, ld *logData, data *string, out chan *logMetrics) {
+	var myslice []string
+	lm := logMetrics{typ, ld.app, ld.tags, ld.prefix, make(map[string]logValue, 5), myslice}
 
-	lm := logMetrics{typ, ld.app, ld.tags, ld.prefix, make(map[string]logValue, 5)}
+	if typ == scalingMsg {
+		events := append(lm.events, *data)
+		lm.events = events
+	}
+
 	if err := logfmt.Unmarshal([]byte(*data), &lm); err != nil {
 		log.WithFields(log.Fields{
 			"err": err,

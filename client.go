@@ -1,11 +1,10 @@
 package main
 
 import (
-	"strconv"
-	"strings"
-
 	statsd "github.com/DataDog/datadog-go/statsd"
 	log "github.com/Sirupsen/logrus"
+	"strconv"
+	"strings"
 )
 
 const sampleRate = 1.0
@@ -158,6 +157,10 @@ func (c *Client) sendScalingMsg(data *logMetrics) {
 		"tags":   tags,
 		"prefix": *data.prefix,
 	}).Debug("sendScalingMsg")
+
+	for _, v := range data.events {
+		c.SimpleEvent(*data.app, v)
+	}
 
 	for _, mk := range scalingMetricsKeys {
 		if v, ok := data.metrics[mk]; ok {
