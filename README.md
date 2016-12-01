@@ -62,8 +62,11 @@ ALLOWED_APPS=my-app,..    # Required. Comma seperated list of app names
 <APP-NAME>_TAGS=mytag,..  # Optional. Comma seperated list of default tags for each app
 <APP-NAME>_PREFIX=..      # Optional. String to be prepended to all metrics from a given app
 DATADOG_DRAIN_DEBUG=..    # Optional. If DEBUG is set, a lot of stuff will be logged :)
+EXCLUDED_TAGS: path,host  # Optional. Recommended to solve problem with tags limit (1000)
 ```
 Note that the capitalized `<APP-NAME>` and `<YOUR-APP-SLUG>` appearing above indicate that your application name and slug should also be in full caps. For example, to set the password for an application named `my-app`, you would need to specify `heroku config:set ALLOWED_APPS=my-app MY-APP_PASSWORD=example_password`
+
+The rationale for `EXCLUDED_TAGS` is that the `path=` tag in Heroku logs includes the full HTTP path - including, for instance, query parameters. This makes is very easy to swarm Datadog with numerous distinct tag/value pairs; and Datadog has a hard limit of 1000 such distinct pairs. When the limit is breached, they blacklist the entire metric.
 
 ## Heroku settings
 
