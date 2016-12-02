@@ -159,7 +159,7 @@ func (c *Client) sendScalingMsg(data *logMetrics) {
 	}).Debug("sendScalingMsg")
 
 	for _, v := range data.events {
-		c.SimpleEvent(*data.app, v)
+		c.SimpleEvent("heroku/api: "+*data.app, v)
 	}
 
 	for _, mk := range scalingMetricsKeys {
