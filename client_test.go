@@ -8,6 +8,7 @@ import (
 var app = "test"
 var tags = []string{"tag1", "tag2"}
 var prefix = "prefix."
+var events = []string{""}
 
 var statsdTests = []struct {
 	cnt      int
@@ -28,6 +29,7 @@ var statsdTests = []struct {
 				"service": {"37", "ms"},
 				"garbage": {"bar", ""},
 			},
+			events,
 		},
 		Expected: []string{
 			"prefix.heroku.router.request.connect:1.000000|h|#tag1,tag2,at:info",
@@ -45,6 +47,7 @@ var statsdTests = []struct {
 				"source":             {"web1", ""},
 				"sample#load_avg_1m": {"0.01", ""},
 			},
+			events,
 		},
 		Expected: []string{
 			"prefix.heroku.dyno.load.avg.1m:0.010000|g|#tag1,tag2,source:web1",
@@ -61,6 +64,7 @@ var statsdTests = []struct {
 				"mailer": {"1", ""},
 				"web":    {"3", ""},
 			},
+			events,
 		},
 		Expected: []string{
 			"prefix.heroku.dyno.mailer:1.000000|g|#tag1,tag2",
