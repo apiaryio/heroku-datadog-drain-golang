@@ -1,12 +1,12 @@
 hash: c76c0b7098287cdac6825c91f6ebce38f119ae923a2d41303b80fb77612cf606
-updated: 2016-12-01T15:16:11.804874454+01:00
+updated: 2017-01-27T17:21:19.492824265+01:00
 imports:
 - name: github.com/DataDog/datadog-go
   version: 909c02b65dd8a52e8fa6072db9752a112227cf21
   subpackages:
   - statsd
 - name: github.com/gin-gonic/gin
-  version: 2dae550eb5392006a4582ce9c90016a9b5a74e8b
+  version: e2212d40c62a98b388a5eb48ecbdcf88534688ba
   subpackages:
   - binding
   - render
@@ -18,6 +18,8 @@ imports:
   version: b84e30acd515aadc4b783ad4ff83aff3299bdfe0
 - name: github.com/manucorporat/sse
   version: ee05b128a739a0fb76c7ebd3ae4810c1de808d6d
+- name: github.com/mattn/go-isatty
+  version: 56b76bdf51f7708750eac80fa38b952bb9f32639
 - name: github.com/Sirupsen/logrus
   version: d26492970760ca5d33129d2d799e34be5c4782eb
 - name: golang.org/x/net
