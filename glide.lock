@@ -1,5 +1,5 @@
-hash: c76c0b7098287cdac6825c91f6ebce38f119ae923a2d41303b80fb77612cf606
-updated: 2017-01-27T17:21:19.492824265+01:00
+hash: 8ee42eb7426d5b6fca3b76e9050e261ced5dc5820fa2dca5c8019eae106de13a
+updated: 2017-04-12T15:04:10.060309604+02:00
 imports:
 - name: github.com/DataDog/datadog-go
   version: 909c02b65dd8a52e8fa6072db9752a112227cf21
@@ -21,7 +21,7 @@ imports:
 - name: github.com/mattn/go-isatty
   version: 56b76bdf51f7708750eac80fa38b952bb9f32639
 - name: github.com/Sirupsen/logrus
-  version: d26492970760ca5d33129d2d799e34be5c4782eb
+  version: ba1b36c82c5e05c4f912a88eab0dcd91a171688f
 - name: golang.org/x/net
   version: f315505cf3349909cdf013ea56690da34e96a451
   subpackages:
