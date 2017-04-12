@@ -1,4 +1,7 @@
+.GOPATH
 pkg
 bin
 heroku-datadog-drain-golang
 vendor/
+/.GOPATH
+/bin
