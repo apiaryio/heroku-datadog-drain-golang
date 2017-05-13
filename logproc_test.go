@@ -20,9 +20,9 @@ func TestLogProc(t *testing.T) {
 	tags := []string{"tag1", "tag2"}
 	prefix := "prefix."
 	s := loadServerCtx()
-	s.in = make(chan *logData, 3)
+	s.in = make(chan *logData, 6)
 	defer close(s.in)
-	s.out = make(chan *logMetrics, 3)
+	s.out = make(chan *logMetrics, 6)
 	defer close(s.out)
 
 	go logProcess(s.in, s.out)
