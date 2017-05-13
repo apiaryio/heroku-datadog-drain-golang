@@ -57,6 +57,15 @@ var fullTests = []struct {
 			"app.metric.eventLoop.max.ms:5008.000000|g|#source:web.1,type:web,route:/parser",
 		},
 	},
+	{
+		cnt: 3,
+		Req: ``,
+		Expected: []string{
+			"_e{16,46}:heroku/api: test|Scaled to web@3:Performance-L worker@5:Standard-2X by user someuser@gmail.com",
+			"heroku.dyno.web:3.000000|g",
+			"heroku.dyno.worker:5.000000|g",
+		},
+	},
 }
 
 func TestStatusRequest(t *testing.T) {
