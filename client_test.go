@@ -54,7 +54,7 @@ var statsdTests = []struct {
 		},
 	},
 	{
-		cnt: 2,
+		cnt: 3,
 		m: logMetrics{
 			scalingMsg,
 			&app,
@@ -64,13 +64,34 @@ var statsdTests = []struct {
 				"mailer": {"1", ""},
 				"web":    {"3", ""},
 			},
-			events,
+			[]string{
+				"Scaling dynos mailer=1 web=3 by foo@bar",
+			},
 		},
 		Expected: []string{
+			"_e{16,39}:heroku/api: test|Scaling dynos mailer=1 web=3 by foo@bar",
 			"prefix.heroku.dyno.mailer:1.000000|g|#tag1,tag2",
 			"prefix.heroku.dyno.web:3.000000|g|#tag1,tag2",
 		},
 	},
+	{
+		cnt: 1,
+		m: logMetrics{
+			releaseMsg,
+			&app,
+			&tags,
+			&prefix,
+			map[string]logValue{
+			},
+			[]string{
+				"Release v1 created by foo@bar",
+			},
+		},
+		Expected: []string{
+			"_e{13,29}:app/api: test|Release v1 created by foo@bar",
+		},
+	},
+
 }
 
 func TestStatsdClient(t *testing.T) {

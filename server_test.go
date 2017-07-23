@@ -43,6 +43,13 @@ var fullTests = []struct {
 		},
 	},
 	{
+		cnt: 1,
+		Req: `222 <134>1 2015-04-07T16:01:43.517062+00:00 host app api - Release v1 created by foo@bar`,
+		Expected: []string{
+			"_e{13,29}:app/api: test|Release v1 created by foo@bar",
+		},
+	},
+	{
 		cnt: 9,
 		Req: `452 <134>1 2015-04-07T16:01:43.517062+00:00 host app web.1 - info: responseLogger: metric#tag#route=/parser metric#request_id=11747467-f4ce-4b06-8c99-92be968a02e3 metric#request_length=541 metric#response_length=5163 metric#parser_time=5ms metric#eventLoop.count=606 metric#eventLoop.avg_ms=515.503300330033 metric#eventLoop.p50_ms=0.8805309734513275 metric#eventLoop.p95_ms=3457.206896551724 metric#eventLoop.p99_ms=3457.206896551724 metric#eventLoop.max_ms=5008`,
 		Expected: []string{

@@ -14,6 +14,7 @@ const (
 	scalingMsg
 	sampleMsg
 	metricsTag
+	releaseMsg
 )
 
 var routerMetricsKeys = []string{"dyno", "method", "status", "path", "host", "code", "desc", "at"}
@@ -50,17 +51,32 @@ func (c *Client) sendToStatsd(in chan *logMetrics) {
 			"prefix": data.prefix,
 		}).Debug("logMetrics received")
 
+
 		if data.typ == routerMsg {
 			c.sendRouterMsg(data)
 		} else if data.typ == sampleMsg {
 			c.sendSampleMsg(data)
 		} else if data.typ == scalingMsg {
+			c.sendEvents(*data.app, "heroku", data.events)
 			c.sendScalingMsg(data)
 		} else if data.typ == metricsTag {
 			c.sendMetricsWithTags(data)
+		} else if data.typ == releaseMsg {
+			c.sendEvents(*data.app, "app", data.events)
 		} else {
 			log.WithField("type", data.typ).Warn("Unknown log message")
 		}
+	}
+}
+
+func (c *Client) sendEvents(app string, namespace string, events []string) {
+	for _, v := range events {
+		c.SimpleEvent(namespace + "/api: "+app, v)
+		log.WithFields(log.Fields{
+			"type":  "event",
+			"app":   app,
+			"value": v,
+		}).Info("Event sent")
 	}
 }
 
@@ -157,15 +173,6 @@ func (c *Client) sendScalingMsg(data *logMetrics) {
 		"tags":   tags,
 		"prefix": *data.prefix,
 	}).Debug("sendScalingMsg")
-
-	for _, v := range data.events {
-		c.SimpleEvent("heroku/api: "+*data.app, v)
-		log.WithFields(log.Fields{
-			"type":  "event",
-			"app":   *data.app,
-			"value": v,
-		}).Info("Event sent")
-	}
 
 	for _, mk := range scalingMetricsKeys {
 		if v, ok := data.metrics[mk]; ok {

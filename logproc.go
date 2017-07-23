@@ -51,6 +51,13 @@ func isDigit(r rune) bool {
 func parseMetrics(typ int, ld *logData, data *string, out chan *logMetrics) {
 	var myslice []string
 	lm := logMetrics{typ, ld.app, ld.tags, ld.prefix, make(map[string]logValue, 5), myslice}
+;
+	if typ == releaseMsg {
+		events := append(lm.events, *data)
+		lm.events = events
+		out <- &lm
+		return
+	}
 
 	if typ == scalingMsg {
 		events := append(lm.events, *data)
@@ -98,15 +105,23 @@ func logProcess(in chan *logData, out chan *logMetrics) {
 			if headers[2] == "router" {
 				parseMetrics(routerMsg, data, &output[1], out)
 			} else if headers[2] == "api" {
-				parseMetrics(scalingMsg, data, &output[1], out)
+				if strings.HasPrefix(output[1], "Scale") {
+					parseMetrics(scalingMsg, data, &output[1], out)
+				} else {
+					log.WithField("output", output).Warn("Non scaling log line")
+				}
 			} else {
 				parseMetrics(sampleMsg, data, &output[1], out)
 			}
 		} else if headers[1] == "app" {
-			dynoType := dynoNumber.ReplaceAllString(headers[2], "")
-			tags := append(*data.tags, "source:"+headers[2], "type:"+dynoType)
-			data.tags = &tags
-			parseMetrics(metricsTag, data, &output[1], out)
+			if headers[2] == "api" && strings.HasPrefix(output[1], "Release") {
+				parseMetrics(releaseMsg, data, &output[1], out)
+			} else {
+				dynoType := dynoNumber.ReplaceAllString(headers[2], "")
+				tags := append(*data.tags, "source:"+headers[2], "type:"+dynoType)
+				data.tags = &tags
+				parseMetrics(metricsTag, data, &output[1], out)
+			}
 		}
 	}
 }
