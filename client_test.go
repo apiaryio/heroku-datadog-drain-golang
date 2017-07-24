@@ -39,6 +39,70 @@ var statsdTests = []struct {
 	{
 		cnt: 1,
 		m: logMetrics{
+			metricsTag,
+			&app,
+			&tags,
+			&prefix,
+			map[string]logValue{
+				"metric#load_avg_2m": {"0.01", ""},
+			},
+			events,
+		},
+		Expected: []string{
+			"prefix.app.metric.load.avg.2m:0.010000|g|#tag1,tag2",
+		},
+	},
+	{
+		cnt: 1,
+		m: logMetrics{
+			metricsTag,
+			&app,
+			&tags,
+			&prefix,
+			map[string]logValue{
+				"sample#load_avg_1m": {"0.01", ""},
+			},
+			events,
+		},
+		Expected: []string{
+			"prefix.app.metric.load.avg.1m:0.010000|g|#tag1,tag2",
+		},
+	},
+	{
+		cnt: 1,
+		m: logMetrics{
+			metricsTag,
+			&app,
+			&tags,
+			&prefix,
+			map[string]logValue{
+				"count#clicks": {"1", ""},
+			},
+			events,
+		},
+		Expected: []string{
+			"prefix.app.metric.clicks:1|c|#tag1,tag2",
+		},
+	},
+	{
+		cnt: 1,
+		m: logMetrics{
+			metricsTag,
+			&app,
+			&tags,
+			&prefix,
+			map[string]logValue{
+				"measure#temperature": {"1.3", ""},
+			},
+			events,
+		},
+		Expected: []string{
+			"prefix.app.metric.temperature:1.300000|h|#tag1,tag2",
+		},
+	},
+	{
+		cnt: 1,
+		m: logMetrics{
 			sampleMsg,
 			&app,
 			&tags,
