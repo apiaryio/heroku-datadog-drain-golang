@@ -86,3 +86,12 @@ If you want to log some custom metrics just format the log line like following:
 app web.1 - info: responseLogger: metric#tag#route=/parser metric#request_id=11747467-f4ce-4b06-8c99-92be968a02e3 metric#request_length=541 metric#response_length=5163 metric#parser_time=5ms metric#eventLoop.count=606 metric#eventLoop.avg_ms=515.503300330033 metric#eventLoop.p50_ms=0.8805309734513275 metric#eventLoop.p95_ms=3457.206896551724 metric#eventLoop.p99_ms=3457.206896551724 metric#eventLoop.max_ms=5008
 ```
 We support `metric#` for values and `metric#tag` for tags.
+
+## Overriding prefix and tags with drain query params
+
+To change the prefix use the drain of form:
+`https://<your-app-slug>:<password>@<this-log-drain-app-slug>.herokuapp.com?prefix=abcd.`
+
+To change tags use the drain of form:
+`https://<your-app-slug>:<password>@<this-log-drain-app-slug>.herokuapp.com?tags=xyz,abcd`
+
