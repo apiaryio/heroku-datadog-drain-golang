@@ -35,9 +35,9 @@ var fullTests = []struct {
 	},
 	{
 		cnt: 3,
-		Req: `222 <134>1 2015-04-07T16:01:43.517062+00:00 host heroku api - Scale to mailer=1, web=3 by someuser@gmail.com`,
+		Req: `222 <134>1 2015-04-07T16:01:43.517062+00:00 host app api - Scaled to web@3:Performance-L mailer@1:Standard-2X by user someuser@gmail.com`,
 		Expected: []string{
-			"_e{16,46}:heroku/api: test|Scale to mailer=1, web=3 by someuser@gmail.com",
+			"_e{16,77}:heroku/api: test|Scaled to web@3:Performance-L mailer@1:Standard-2X by user someuser@gmail.com",
 			"heroku.dyno.mailer:1.000000|g",
 			"heroku.dyno.web:3.000000|g",
 		},
