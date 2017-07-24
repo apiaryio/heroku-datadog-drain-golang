@@ -1,6 +1,6 @@
-FROM golang:1.7
+FROM golang:1.8
 
-ENV GLIDE_VERSION 0.10.2
+ENV GLIDE_VERSION v0.12.3
 ENV APP_VERSION 1.0.2
 
 ADD https://github.com/Masterminds/glide/releases/download/${GLIDE_VERSION}/glide-${GLIDE_VERSION}-linux-amd64.tar.gz /tmp
