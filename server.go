@@ -118,11 +118,19 @@ func init() {
 	log.SetLevel(log.InfoLevel)
 }
 
-func (s *ServerCtx) processLogs(c *gin.Context) {
+func (s *ServerCtx) getTags(c *gin.Context, app string) []string {
+        requestTags := c.DefaultQuery("tags", "")
+        if requestTags == "" {
+                return s.AppTags[app];
+        } else {
+                return strings.Split(requestTags, ",");
+        }
+}
 
-	app := c.MustGet(gin.AuthUserKey).(string)
-	tags := s.AppTags[app]
-	prefix := s.AppPrefix[app]
+func (s *ServerCtx) processLogs(c *gin.Context) {
+       app := c.MustGet(gin.AuthUserKey).(string)
+       tags := s.getTags(c, app)
+       prefix := c.DefaultQuery("prefix", s.AppPrefix[app])
 
 	scanner := bufio.NewScanner(c.Request.Body)
 	for scanner.Scan() {
