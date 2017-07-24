@@ -103,10 +103,14 @@ func logProcess(in chan *logData, out chan *logMetrics) {
 				parseMetrics(sampleMsg, data, &output[1], out)
 			}
 		} else if headers[1] == "app" {
-			dynoType := dynoNumber.ReplaceAllString(headers[2], "")
-			tags := append(*data.tags, "source:"+headers[2], "type:"+dynoType)
-			data.tags = &tags
-			parseMetrics(metricsTag, data, &output[1], out)
+			if headers[2] == "api" {
+				parseMetrics(scalingMsg, data, &output[1], out)
+			} else {
+				dynoType := dynoNumber.ReplaceAllString(headers[2], "")
+				tags := append(*data.tags, "source:"+headers[2], "type:"+dynoType)
+				data.tags = &tags
+				parseMetrics(metricsTag, data, &output[1], out)
+			}
 		}
 	}
 }
