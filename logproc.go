@@ -59,11 +59,6 @@ func parseMetrics(typ int, ld *logData, data *string, out chan *logMetrics) {
 		return
 	}
 
-	if typ == scalingMsg {
-		events := append(lm.events, *data)
-		lm.events = events
-	}
-
 	if err := logfmt.Unmarshal([]byte(*data), &lm); err != nil {
 		log.WithFields(log.Fields{
 			"err": err,
@@ -77,7 +72,35 @@ func parseMetrics(typ int, ld *logData, data *string, out chan *logMetrics) {
 	out <- &lm
 }
 
-//
+var scalingRe = regexp.MustCompile("Scaled to (.*) by user .*")
+var scaledDynoRe = regexp.MustCompile("([^@ ]*)@([^: ]*):([^ ]*)")
+
+func parseScalingMessage(ld *logData, message *string, out chan *logMetrics) {
+	if scalingInfo := scalingRe.FindStringSubmatch(*message); scalingInfo != nil {
+		scaledDynoInfos := scaledDynoRe.FindAllStringSubmatch(scalingInfo[1], -1)
+		logValues := make(map[string]logValue)
+		for _, dynoInfo := range scaledDynoInfos {
+			dynoName := dynoInfo[1]
+			count := dynoInfo[2]
+			dynoType := dynoInfo[3]
+			log.WithFields(log.Fields{
+				"dynoName": dynoName,
+				"count": count,
+				"dynoType": dynoType,
+			}).Debug()
+			logValues[dynoName] = logValue{count, dynoType}
+		}
+		events := []string{*message}
+		lm := logMetrics{scalingMsg, ld.app, ld.tags, ld.prefix, logValues, events}
+		out <- &lm
+	} else {
+		log.WithFields(log.Fields{
+			"err": "Scaling message not matched",
+			"message": *message,
+		}).Warn()
+	}
+}
+
 func logProcess(in chan *logData, out chan *logMetrics) {
 
 	var data *logData
@@ -104,18 +127,16 @@ func logProcess(in chan *logData, out chan *logMetrics) {
 		if headers[1] == "heroku" {
 			if headers[2] == "router" {
 				parseMetrics(routerMsg, data, &output[1], out)
-			} else if headers[2] == "api" {
-				if strings.HasPrefix(output[1], "Scale") {
-					parseMetrics(scalingMsg, data, &output[1], out)
-				} else {
-					log.WithField("output", output).Warn("Non scaling log line")
-				}
 			} else {
 				parseMetrics(sampleMsg, data, &output[1], out)
 			}
 		} else if headers[1] == "app" {
-			if headers[2] == "api" && strings.HasPrefix(output[1], "Release") {
-				parseMetrics(releaseMsg, data, &output[1], out)
+			if headers[2] == "api" {
+				if strings.HasPrefix(output[1], "Release") {
+					parseMetrics(releaseMsg, data, &output[1], out)
+				} else {
+					parseScalingMessage(data, &output[1], out)
+				}
 			} else {
 				dynoType := dynoNumber.ReplaceAllString(headers[2], "")
 				tags := append(*data.tags, "source:"+headers[2], "type:"+dynoType)
