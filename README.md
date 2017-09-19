@@ -40,6 +40,12 @@ heroku config:set HEROKU_APP_NAME=$(heroku apps:info|grep ===|cut -d' ' -f2)
 heroku config:add DATADOG_API_KEY=<your-Datadog-API-key>
 ```
 
+Don't forget [set right golang version](https://devcenter.heroku.com/articles/go-support#go-versions).
+
+```
+heroku config:add GOVERSION=go1.9
+```
+
 ### Deploy to Heroku.
 
 ```
