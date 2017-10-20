@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"net/http"
 	"os"
 	"strings"
 
@@ -19,15 +20,16 @@ type logData struct {
 }
 
 type ServerCtx struct {
-	Port        string
-	AllowedApps []string
-	AppPasswd   map[string]string
-	AppTags     map[string][]string
-	AppPrefix   map[string]string
-	StatsdUrl   string
-	Debug       bool
-	in          chan *logData
-	out         chan *logMetrics
+	Port           string
+	AllowedApps    []string
+	AppPasswd      map[string]string
+	AppTags        map[string][]string
+	AppPrefix      map[string]string
+	StatsdUrl      string
+	Debug          bool
+	in             chan *logData
+	out            chan *logMetrics
+	newRelicClient *NewRelicClient
 }
 
 //Load configuration from envrionment variables, see list below
@@ -44,18 +46,16 @@ type ServerCtx struct {
 //String to be prepended to all metrics from a given app
 
 //STATSD_URL=..  Required. Default: localhost:8125
-//DATADOG_DRAIN_DEBUG=         Optional. If DEBUG is set, a lot of stuff w
+//DATADOG_DRAIN_DEBUG=         Optional. If DEBUG is set, a lot of stuff will be logged
 func loadServerCtx() *ServerCtx {
-
-	s := &ServerCtx{"8080",
-		nil,
-		make(map[string]string),
-		make(map[string][]string),
-		make(map[string]string),
-		"localhost:8125",
-		false,
-		nil,
-		nil,
+	s := &ServerCtx{
+		Port:           "8080",
+		AppPasswd:      make(map[string]string),
+		AppTags:        make(map[string][]string),
+		AppPrefix:      make(map[string]string),
+		StatsdUrl:      "localhost:8125",
+		Debug:          false,
+		newRelicClient: NewNewRelicClient(),
 	}
 	port := os.Getenv("PORT")
 	if port != "" {
@@ -119,6 +119,8 @@ func init() {
 }
 
 func (s *ServerCtx) processLogs(c *gin.Context) {
+	txn := s.newRelicClient.StartTransaction("/", c.Writer.(http.ResponseWriter), c.Request)
+	defer s.newRelicClient.EndTransaction(txn)
 
 	app := c.MustGet(gin.AuthUserKey).(string)
 	tags := s.AppTags[app]
