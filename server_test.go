@@ -22,15 +22,15 @@ var fullTests = []struct {
 		cnt: 2,
 		Req: `255 <158>1 2015-04-02T11:52:34.520012+00:00 host heroku router - at=info method=POST path="/users" host=myapp.com request_id=c1806361-2081-42e7-a8aa-92b6808eac8e fwd="24.76.242.18" dyno=web.1 connect=1ms service=37ms status=201 bytes=828`,
 		Expected: []string{
-			"heroku.router.request.connect:1.000000|h|#dyno:web.1,method:POST,status:201,path:/users,host:myapp.com,at:info",
-			"heroku.router.request.service:37.000000|h|#dyno:web.1,method:POST,status:201,path:/users,host:myapp.com,at:info",
+			"heroku.router.request.connect:1.000000|h|#at:info,dyno:web.1,host:myapp.com,method:POST,path:/users,status:201,statusFamily:2xx",
+			"heroku.router.request.service:37.000000|h|#at:info,dyno:web.1,host:myapp.com,method:POST,path:/users,status:201,statusFamily:2xx",
 		},
 	},
 	{
 		cnt: 1,
 		Req: `229 <45>1 2015-04-02T11:48:16.839257+00:00 host heroku web.1 - source=web.1 dyno=heroku.35930502.b9de5fce-44b7-4287-99a7-504519070cba sample#load_avg_1m=0.01`,
 		Expected: []string{
-			"heroku.dyno.load.avg.1m:0.010000|g|#type:web,source:web.1",
+			"heroku.dyno.load.avg.1m:0.010000|g|#source:web.1,type:web",
 		},
 	},
 	{

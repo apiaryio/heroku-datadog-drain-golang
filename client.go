@@ -6,6 +6,8 @@ import (
 	"strconv"
 	"strings"
 	"errors"
+	"regexp"
+	"sort"
 )
 
 const sampleRate = 1.0
@@ -27,6 +29,8 @@ type Client struct {
 	*statsd.Client
 	ExcludedTags map[string]bool
 }
+
+var statusCode *regexp.Regexp = regexp.MustCompile(`^(?P<Family>\d)\d\d`)
 
 func statsdClient(addr string) (*Client, error) {
 
@@ -92,11 +96,23 @@ func (c *Client) extractTags(tags []string, permittedTags []string, metrics map[
 			tags = append(tags, mk+":"+v.Val)
 		}
 	}
+	sort.Strings(tags)
+	return tags
+}
+
+func addStatusFamilyToTags(data *logMetrics, tags []string) []string {
+	if val, ok := data.metrics["status"]; ok {
+		match := statusCode.FindStringSubmatch(val.Val)
+		if len(match) > 1 {
+			tags = append(tags, "statusFamily:"+match[1]+"xx")
+		}
+	}
 	return tags
 }
 
 func (c *Client) sendRouterMsg(data *logMetrics) {
 	tags := c.extractTags(*data.tags, routerMetricsKeys, data.metrics)
+	tags = addStatusFamilyToTags(data, tags)
 
 	log.WithFields(log.Fields{
 		"app":    *data.app,
