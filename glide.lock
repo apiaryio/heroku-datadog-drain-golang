@@ -1,12 +1,12 @@
-hash: 8ee42eb7426d5b6fca3b76e9050e261ced5dc5820fa2dca5c8019eae106de13a
-updated: 2017-04-12T15:04:10.060309604+02:00
+hash: 8789724a62f41fa5bd72030d75e697b5cab867112acf443a382f355c79c79581
+updated: 2018-01-10T14:59:21.534524+01:00
 imports:
 - name: github.com/DataDog/datadog-go
-  version: 909c02b65dd8a52e8fa6072db9752a112227cf21
+  version: 0ddda6bee21174ef6c4873647cb0d6ec9cba996f
   subpackages:
   - statsd
 - name: github.com/gin-gonic/gin
-  version: e2212d40c62a98b388a5eb48ecbdcf88534688ba
+  version: d459835d2b077e44f7c9b453505ee29881d5d12d
   subpackages:
   - binding
   - render
@@ -14,6 +14,10 @@ imports:
   version: 2402d76f3d41f928c7902a765dfc872356dd3aad
   subpackages:
   - proto
+- name: github.com/heroku/x
+  version: 705849e307dd75c91728463dea5bfd08ef493e64
+  subpackages:
+  - hmetrics
 - name: github.com/kr/logfmt
   version: b84e30acd515aadc4b783ad4ff83aff3299bdfe0
 - name: github.com/manucorporat/sse
@@ -22,6 +26,10 @@ imports:
   version: 56b76bdf51f7708750eac80fa38b952bb9f32639
 - name: github.com/Sirupsen/logrus
   version: ba1b36c82c5e05c4f912a88eab0dcd91a171688f
+- name: github.com/ugorji/go
+  version: ccfe18359b55b97855cee1d3f74e5efbda4869dc
+  subpackages:
+  - codec
 - name: golang.org/x/net
   version: f315505cf3349909cdf013ea56690da34e96a451
   subpackages:
