@@ -1,10 +1,12 @@
-hash: 8789724a62f41fa5bd72030d75e697b5cab867112acf443a382f355c79c79581
-updated: 2018-01-10T14:59:21.534524+01:00
+hash: 508176bfbbac2de25feadd221e58941b3262b4d6e7d84af47851874fbbd69ce3
+updated: 2018-01-11T10:59:02.026208+01:00
 imports:
 - name: github.com/DataDog/datadog-go
   version: 0ddda6bee21174ef6c4873647cb0d6ec9cba996f
   subpackages:
   - statsd
+- name: github.com/gin-contrib/sse
+  version: 22d885f9ecc78bf4ee5d72b937e4bbcdc58e8cae
 - name: github.com/gin-gonic/gin
   version: d459835d2b077e44f7c9b453505ee29881d5d12d
   subpackages:
@@ -18,22 +20,17 @@ imports:
   version: 705849e307dd75c91728463dea5bfd08ef493e64
   subpackages:
   - hmetrics
+  - hmetrics/onload
 - name: github.com/kr/logfmt
   version: b84e30acd515aadc4b783ad4ff83aff3299bdfe0
-- name: github.com/manucorporat/sse
-  version: ee05b128a739a0fb76c7ebd3ae4810c1de808d6d
 - name: github.com/mattn/go-isatty
-  version: 56b76bdf51f7708750eac80fa38b952bb9f32639
+  version: 0360b2af4f38e8d38c7fce2a9f4e702702d73a39
 - name: github.com/Sirupsen/logrus
   version: ba1b36c82c5e05c4f912a88eab0dcd91a171688f
 - name: github.com/ugorji/go
   version: ccfe18359b55b97855cee1d3f74e5efbda4869dc
   subpackages:
   - codec
-- name: golang.org/x/net
-  version: f315505cf3349909cdf013ea56690da34e96a451
-  subpackages:
-  - context
 - name: golang.org/x/sys
   version: f64b50fbea64174967a8882830d621a18ee1548e
   subpackages:
