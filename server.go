@@ -7,6 +7,8 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/gin-gonic/gin"
+
+	_ "github.com/heroku/x/hmetrics/onload"
 )
 
 const bufferLen = 500

@@ -9,3 +9,6 @@ import:
 - package: github.com/gin-gonic/gin
   version: ^1.1.0
 - package: github.com/kr/logfmt
+- package: github.com/heroku/x
+  subpackages:
+  - hmetrics
