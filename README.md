@@ -1,3 +1,4 @@
+[![wercker status](https://app.wercker.com/status/60e477c04d28cfc54f0be48d480b80f2/s/master "wercker status")](https://app.wercker.com/project/byKey/60e477c04d28cfc54f0be48d480b80f2)
 [![Build Status](https://travis-ci.org/apiaryio/heroku-datadog-drain-golang.svg?branch=master)](https://travis-ci.org/apiaryio/heroku-datadog-drain-golang)
 
 # Heroku Datadog Drain
@@ -94,7 +95,7 @@ app web.1 - info: responseLogger: metric#tag#route=/parser metric#request_id=117
 ```
 We support:
 
- * `metric#` and `sample#` for gauges 
+ * `metric#` and `sample#` for gauges
  * `metric#tag` for tags.
  * `count#` for counter increments
  * `measure#` for histograms
