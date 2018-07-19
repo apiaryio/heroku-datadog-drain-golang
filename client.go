@@ -23,7 +23,6 @@ const (
 var routerMetricsKeys = []string{"dyno", "method", "status", "path", "host", "code", "desc", "at"}
 var sampleMetricsKeys = []string{"source"}
 var scalingMetricsKeys = []string{"mailer", "web"}
-var customMetricsKeys = []string{"media_type", "output_type", "route"}
 
 type Client struct {
 	*statsd.Client
@@ -224,20 +223,16 @@ func (c *Client) sendMetric(metricType string, metricName string, value float64,
 func (c *Client) sendMetricsWithTags(data *logMetrics) {
 	tags := *data.tags
 
-Tags:
 	for k, v := range data.metrics {
 		if strings.Index(k, "tag#") != -1 {
 			if _, err := strconv.Atoi(v.Val); err != nil {
 				m := strings.Replace(strings.Split(k, "tag#")[1], "_", ".", -1)
-				for _, mk := range customMetricsKeys {
-					if m == mk {
-						tags = append(tags, mk+":"+v.Val)
-						continue Tags
-					}
-				}
+				tags = append(tags, m+":"+v.Val)
 			}
 		}
 	}
+	// Sort the tags so that the test results can be stable
+	sort.Strings(tags)
 
 	log.WithFields(log.Fields{
 		"app":    *data.app,
