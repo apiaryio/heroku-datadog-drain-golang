@@ -53,15 +53,29 @@ var fullTests = []struct {
 		cnt: 9,
 		Req: `452 <134>1 2015-04-07T16:01:43.517062+00:00 host app web.1 - info: responseLogger: metric#tag#route=/parser metric#request_id=11747467-f4ce-4b06-8c99-92be968a02e3 metric#request_length=541 metric#response_length=5163 metric#parser_time=5ms metric#eventLoop.count=606 metric#eventLoop.avg_ms=515.503300330033 metric#eventLoop.p50_ms=0.8805309734513275 metric#eventLoop.p95_ms=3457.206896551724 metric#eventLoop.p99_ms=3457.206896551724 metric#eventLoop.max_ms=5008`,
 		Expected: []string{
-			"app.metric.request.length:541.000000|g|#source:web.1,type:web,route:/parser",
-			"app.metric.response.length:5163.000000|g|#source:web.1,type:web,route:/parser",
-			"app.metric.parser.time:5.000000|g|#source:web.1,type:web,route:/parser",
-			"app.metric.eventLoop.count:606.000000|g|#source:web.1,type:web,route:/parser",
-			"app.metric.eventLoop.avg.ms:515.503300|g|#source:web.1,type:web,route:/parser",
-			"app.metric.eventLoop.p50.ms:0.880531|g|#source:web.1,type:web,route:/parser",
-			"app.metric.eventLoop.p95.ms:3457.206897|g|#source:web.1,type:web,route:/parser",
-			"app.metric.eventLoop.p99.ms:3457.206897|g|#source:web.1,type:web,route:/parser",
-			"app.metric.eventLoop.max.ms:5008.000000|g|#source:web.1,type:web,route:/parser",
+			"app.metric.request.length:541.000000|g|#route:/parser,source:web.1,type:web",
+			"app.metric.response.length:5163.000000|g|#route:/parser,source:web.1,type:web",
+			"app.metric.parser.time:5.000000|g|#route:/parser,source:web.1,type:web",
+			"app.metric.eventLoop.count:606.000000|g|#route:/parser,source:web.1,type:web",
+			"app.metric.eventLoop.avg.ms:515.503300|g|#route:/parser,source:web.1,type:web",
+			"app.metric.eventLoop.p50.ms:0.880531|g|#route:/parser,source:web.1,type:web",
+			"app.metric.eventLoop.p95.ms:3457.206897|g|#route:/parser,source:web.1,type:web",
+			"app.metric.eventLoop.p99.ms:3457.206897|g|#route:/parser,source:web.1,type:web",
+			"app.metric.eventLoop.max.ms:5008.000000|g|#route:/parser,source:web.1,type:web",
+		},
+	},
+	{
+		cnt: 1,
+		Req: `127 <134>1 2015-04-07T16:01:43.517062+00:00 host app web.1 - info: responseLogger: metric#tag#custom=test metric#request_length=541`,
+		Expected: []string{
+			"app.metric.request.length:541.000000|g|#custom:test,source:web.1,type:web",
+		},
+	},
+	{
+		cnt: 1,
+		Req: `152 <134>1 2015-04-07T16:01:43.517062+00:00 host app web.1 - info: responseLogger: metric#tag#custom=test metric#tag#custom2=test2 metric#request_length=541`,
+		Expected: []string{
+			"app.metric.request.length:541.000000|g|#custom2:test2,custom:test,source:web.1,type:web",
 		},
 	},
 }
