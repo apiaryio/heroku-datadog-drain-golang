@@ -1,8 +1,10 @@
-box: golang
+box: golang:1.11
 build:
   steps:
-    - setup-go-workspace
-    - glide-install
+    - script:
+        name: go install
+        code: |
+          go get ./...
     # Build the project
     - script:
         name: go build
