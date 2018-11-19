@@ -1,13 +1,14 @@
 package main
 
 import (
-	statsd "github.com/DataDog/datadog-go/statsd"
-	log "github.com/Sirupsen/logrus"
-	"strconv"
-	"strings"
 	"errors"
 	"regexp"
 	"sort"
+	"strconv"
+	"strings"
+
+	statsd "github.com/DataDog/datadog-go/statsd"
+	log "github.com/Sirupsen/logrus"
 )
 
 const sampleRate = 1.0
@@ -55,7 +56,6 @@ func (c *Client) sendToStatsd(in chan *logMetrics) {
 			"tags":   data.tags,
 			"prefix": data.prefix,
 		}).Debug("logMetrics received")
-
 
 		if data.typ == routerMsg {
 			c.sendRouterMsg(data)
@@ -139,6 +139,20 @@ func (c *Client) sendRouterMsg(data *logMetrics) {
 		return
 	}
 
+	bytes, err := strconv.ParseFloat(data.metrics["bytes"].Val, 10)
+	if err != nil {
+		log.WithFields(log.Fields{
+			"type":   "router",
+			"metric": "bytes",
+			"err":    err,
+		}).Info("Could not parse metric value")
+		return
+	}
+	// https://devcenter.heroku.com/articles/http-routing
+	err = c.Histogram(*data.prefix+"heroku.router.response.bytes", bytes, tags, sampleRate)
+	if err != nil {
+		log.WithField("error", err).Info("Failed to send Histogram")
+	}
 	err = c.Histogram(*data.prefix+"heroku.router.request.connect", conn, tags, sampleRate)
 	if err != nil {
 		log.WithField("error", err).Info("Failed to send Histogram")
@@ -214,10 +228,14 @@ func (c *Client) sendScalingMsg(data *logMetrics) {
 
 func (c *Client) sendMetric(metricType string, metricName string, value float64, tags []string) error {
 	switch metricType {
-	case "metric", "sample": return c.Gauge(metricName, value, tags, sampleRate)
-	case "measure": return c.Histogram(metricName, value, tags, sampleRate)
-	case "count": return c.Count(metricName, int64(value), tags, sampleRate)
-	default: return errors.New("Unknown metric type"+metricType)
+	case "metric", "sample":
+		return c.Gauge(metricName, value, tags, sampleRate)
+	case "measure":
+		return c.Histogram(metricName, value, tags, sampleRate)
+	case "count":
+		return c.Count(metricName, int64(value), tags, sampleRate)
+	default:
+		return errors.New("Unknown metric type" + metricType)
 	}
 }
 
