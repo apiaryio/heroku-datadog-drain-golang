@@ -45,7 +45,7 @@ heroku config:add DATADOG_API_KEY=<your-Datadog-API-key>
 Don't forget [set right golang version](https://devcenter.heroku.com/articles/go-support#go-versions).
 
 ```
-heroku config:add GOVERSION=go1.11
+heroku config:set GOVERSION=go1.12
 ```
 
 You can use specific settings for [Go modules](https://github.com/heroku/heroku-buildpack-go#go-module-specifics)

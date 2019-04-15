@@ -1,4 +1,4 @@
-// +heroku goVersion go1.11
+// +heroku goVersion go1.12
 module github.com/apiaryio/heroku-datadog-drain-golang
 
 require (
