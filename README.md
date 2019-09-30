@@ -31,7 +31,7 @@ heroku create
 heroku config:set ALLOWED_APPS=<your-app-slug> <YOUR-APP-SLUG>_PASSWORD=<password>
 ```
 
-> **OPTIONAL**: Setup Heroku build packs, including the Datadog DogStatsD client.
+> **OPTIONAL**: Setup Heroku build packs, including the [Datadog buildpack with Agent V6](https://github.com/DataDog/heroku-buildpack-datadog.git).
 > If you already have a StatsD client running, see the STATSD_URL configuration option below.
 
 ```
@@ -42,7 +42,7 @@ heroku config:set HEROKU_APP_NAME=$(heroku apps:info|grep ===|cut -d' ' -f2)
 heroku config:add DD_API_KEY=<your-Datadog-API-key>
 ```
 
-> **DANGER**: Original datadog buildpack is deprecated and datadog have own [buildpack](https://docs.datadoghq.com/agent/basic_agent_usage/heroku/) that isn't compatible. You have change `DATADOG_API_KEY` to `DD_API_KEY` during upgrade
+> **DANGER**: Original [miketheman heroku-buildpack-datadog project is deprecated](https://github.com/miketheman/heroku-buildpack-datadog) and datadog have own [buildpack](https://docs.datadoghq.com/agent/basic_agent_usage/heroku/) that isn't backward compatible. You have change `DATADOG_API_KEY` to `DD_API_KEY` during upgrade
 
 Don't forget [set right golang version](https://devcenter.heroku.com/articles/go-support#go-versions).
 
