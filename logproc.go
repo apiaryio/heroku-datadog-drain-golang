@@ -113,18 +113,23 @@ func logProcess(in chan *logData, out chan *logMetrics) {
 		}
 
 		log.Debugln(*data.line)
-		output := strings.Split(*data.line, " - ")
+		var output []string
+		output = strings.Split(*data.line, " - ")
+		if len(output) < 2 {
+			output = strings.Split(*data.line, " app[heroku-redis]: ")
+		}
 		if len(output) < 2 {
 			continue
 		}
 		headers := strings.Split(strings.TrimSpace(output[0]), " ")
-		if len(headers) < 6 {
-			continue
+		if len(headers) >= 6 {
+			headers = headers[3:6]
 		}
-		headers = headers[3:6]
 
 		log.WithField("headers", headers).Debug("Line headers")
-		if headers[1] == "heroku" {
+		if strings.Contains(output[1], "source=REDIS") {
+			parseMetrics(sampleMsg, data, &output[1], out)
+		} else if headers[1] == "heroku" {
 			if headers[2] == "router" {
 				parseMetrics(routerMsg, data, &output[1], out)
 			} else {
