@@ -5,7 +5,7 @@
 
 Golang version of [NodeJS](https://github.com/ozinc/heroku-datadog-drain)
 
-Funnel metrics from multiple Heroku apps into DataDog using statsd.
+Funnel metrics from multiple Heroku apps into Datadog using statsd.
 
 ## Supported Heroku metrics:
 
