@@ -13,7 +13,8 @@ func TestLogProc(t *testing.T) {
 229 <45>1 2015-04-02T11:48:16.839257+00:00 host heroku web.1 - source=web.1 dyno=heroku.35930502.b9de5fce-44b7-4287-99a7-504519070cba sample#load_avg_1m=0.01 sample#load_avg_5m=0.02 sample#load_avg_15m=0.03
 222 <134>1 2017-05-13T15:35:33.787162+00:00 host app api - Scaled to mailer@3:Performance-L web@5:Standard-2X by user someuser@gmail.com
 222 <134>1 2015-04-07T16:01:43.517062+00:00 host heroku api - this_is="broken
-222 <134>1 2015-04-07T16:01:43.517062+00:00 host app api - Release v138 created by user foo@bar`, "\n")
+222 <134>1 2015-04-07T16:01:43.517062+00:00 host app api - Release v138 created by user foo@bar
+222 <134>1 2019-10-08T22:21:03+00:00 app[heroku-redis]: source=REDIS addon=redis-lively-37272 sample#active-connections=14 sample#load-avg-1m=0.505 sample#load-avg-5m=0.87 sample#load-avg-15m=0.77 sample#read-iops=0 sample#write-iops=38.19 sample#memory-total=15664212kB sample#memory-free=9796400kB sample#memory-cached=3751668kB sample#memory-redis=2131576bytes sample#hit-rate=0.78062 sample#evicted-keys=0`, "\n")
 
 	app := "test"
 	tags := []string{"tag1", "tag2"}
@@ -49,5 +50,10 @@ func TestLogProc(t *testing.T) {
 	res = <-s.out
 	if res.typ != releaseMsg {
 		t.Error("result must be RELEASE")
+	}
+
+	res = <-s.out
+	if res.typ != sampleMsg {
+		t.Error("result must be SAMPLE")
 	}
 }
