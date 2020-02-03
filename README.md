@@ -13,6 +13,7 @@ Funnel metrics from multiple Heroku apps into Datadog using statsd.
 - Application errors
 - Custom metrics
 - Heroku Dyno [runtime metrics](https://devcenter.heroku.com/articles/log-runtime-metrics)
+- [Heroku Redis Metrics](https://devcenter.heroku.com/articles/heroku-redis-metrics-logs)
 - (beta) Heroku Runtime Language Metrics - we add support for [golang](https://devcenter.heroku.com/articles/language-runtime-metrics-go#getting-started) used in Heroku, next step add this to send to Datadog too for self monitoring app.
 
 ## Get Started
