@@ -1,5 +1,4 @@
-[![wercker status](https://app.wercker.com/status/60e477c04d28cfc54f0be48d480b80f2/s/master 'wercker status')](https://app.wercker.com/project/byKey/60e477c04d28cfc54f0be48d480b80f2)
-[![Build Status](https://travis-ci.org/apiaryio/heroku-datadog-drain-golang.svg?branch=master)](https://travis-ci.org/apiaryio/heroku-datadog-drain-golang)
+[![Build Status](https://github.com/apiaryio/heroku-datadog-drain-golang/workflows/Go/badge.svg)](https://github.com/apiaryio/heroku-datadog-drain-golang/actions/workflows/go.yml)
 
 # Heroku Datadog Drain
 
