@@ -1,4 +1,4 @@
-FROM golang:1.12 as builder
+FROM golang:1.15 as builder
 
 ENV APP_VERSION 1.2.0
 
