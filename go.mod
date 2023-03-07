@@ -4,21 +4,26 @@ module github.com/apiaryio/heroku-datadog-drain-golang
 require (
 	github.com/DataDog/datadog-go v0.0.0-20170427165718-0ddda6bee211
 	github.com/Sirupsen/logrus v0.11.5
-	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/gin-contrib/sse v0.0.0-20170109093832-22d885f9ecc7 // indirect
-	github.com/gin-gonic/gin v0.0.0-20170702092826-d459835d2b07
-	github.com/golang/protobuf v0.0.0-20160106020635-2402d76f3d41 // indirect
+	github.com/gin-gonic/gin v1.7.7
 	github.com/heroku/x v0.0.0-20171004170240-705849e307dd
 	github.com/kr/logfmt v0.0.0-20140226030751-b84e30acd515
+)
+
+require (
+	github.com/gin-contrib/sse v0.1.0 // indirect
+	github.com/go-playground/locales v0.13.0 // indirect
+	github.com/go-playground/universal-translator v0.17.0 // indirect
+	github.com/go-playground/validator/v10 v10.4.1 // indirect
+	github.com/golang/protobuf v1.3.3 // indirect
+	github.com/json-iterator/go v1.1.9 // indirect
 	github.com/kr/pretty v0.1.0 // indirect
-	github.com/mattn/go-isatty v0.0.3 // indirect
-	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/stretchr/testify v1.2.2 // indirect
-	github.com/ugorji/go v0.0.0-20171231121548-ccfe18359b55 // indirect
-	golang.org/x/net v0.0.0-20181114220301-adae6a3d119a // indirect
-	golang.org/x/sys v0.0.0-20160415135844-f64b50fbea64 // indirect
+	github.com/leodido/go-urn v1.2.0 // indirect
+	github.com/mattn/go-isatty v0.0.12 // indirect
+	github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421 // indirect
+	github.com/modern-go/reflect2 v0.0.0-20180701023420-4b7aa43c6742 // indirect
+	github.com/ugorji/go/codec v1.1.7 // indirect
+	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9 // indirect
+	golang.org/x/sys v0.0.0-20200116001909-b77594299b42 // indirect
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
-	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
-	gopkg.in/go-playground/validator.v8 v8.15.1 // indirect
-	gopkg.in/yaml.v2 v2.0.0-20160912165603-31c299268d30 // indirect
+	gopkg.in/yaml.v2 v2.2.8 // indirect
 )
