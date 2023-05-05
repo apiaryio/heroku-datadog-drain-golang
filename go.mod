@@ -4,21 +4,33 @@ module github.com/apiaryio/heroku-datadog-drain-golang
 require (
 	github.com/DataDog/datadog-go v0.0.0-20170427165718-0ddda6bee211
 	github.com/Sirupsen/logrus v0.11.5
-	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/gin-contrib/sse v0.0.0-20170109093832-22d885f9ecc7 // indirect
-	github.com/gin-gonic/gin v0.0.0-20170702092826-d459835d2b07
-	github.com/golang/protobuf v0.0.0-20160106020635-2402d76f3d41 // indirect
+	github.com/gin-gonic/gin v1.9.0
 	github.com/heroku/x v0.0.0-20171004170240-705849e307dd
 	github.com/kr/logfmt v0.0.0-20140226030751-b84e30acd515
-	github.com/kr/pretty v0.1.0 // indirect
-	github.com/mattn/go-isatty v0.0.3 // indirect
-	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/stretchr/testify v1.2.2 // indirect
+)
+
+require (
+	github.com/bytedance/sonic v1.8.0 // indirect
+	github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311 // indirect
+	github.com/gin-contrib/sse v0.1.0 // indirect
+	github.com/go-playground/locales v0.14.1 // indirect
+	github.com/go-playground/universal-translator v0.18.1 // indirect
+	github.com/go-playground/validator/v10 v10.11.2 // indirect
+	github.com/goccy/go-json v0.10.0 // indirect
+	github.com/json-iterator/go v1.1.12 // indirect
+	github.com/klauspost/cpuid/v2 v2.0.9 // indirect
+	github.com/leodido/go-urn v1.2.1 // indirect
+	github.com/mattn/go-isatty v0.0.17 // indirect
+	github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421 // indirect
+	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/pelletier/go-toml/v2 v2.0.6 // indirect
+	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go v0.0.0-20171231121548-ccfe18359b55 // indirect
-	golang.org/x/net v0.0.0-20181114220301-adae6a3d119a // indirect
-	golang.org/x/sys v0.0.0-20160415135844-f64b50fbea64 // indirect
-	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
-	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
-	gopkg.in/go-playground/validator.v8 v8.15.1 // indirect
-	gopkg.in/yaml.v2 v2.0.0-20160912165603-31c299268d30 // indirect
+	golang.org/x/arch v0.0.0-20210923205945-b76863e36670 // indirect
+	golang.org/x/crypto v0.5.0 // indirect
+	golang.org/x/net v0.7.0 // indirect
+	golang.org/x/sys v0.5.0 // indirect
+	golang.org/x/text v0.7.0 // indirect
+	google.golang.org/protobuf v1.28.1 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
